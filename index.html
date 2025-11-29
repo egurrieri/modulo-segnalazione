@@ -40,25 +40,32 @@
     <input id="filiale" name="filiale" type="text" />
 
     <h2>3. Dettagli Evento</h2>
+
+    <h3>Orario Pianificato</h3>
     <div class="row">
       <div>
-        <label for="data_evento">Data Evento</label>
-        <input id="data_evento" name="data_evento" type="date" />
+        <label for="ora_pianificata_ingresso">Ingresso Pianificato</label>
+        <input id="ora_pianificata_ingresso" name="ora_pianificata_ingresso" type="time" />
       </div>
       <div>
-        <label for="ora_pianificata">Orario Pianificato</label>
-        <input id="ora_pianificata" name="ora_pianificata" type="time" />
-      </div>
-      <div>
-        <label for="ora_effettiva">Orario Effettivo</label>
-        <input id="ora_effettiva" name="ora_effettiva" type="time" />
+        <label for="ora_pianificata_uscita">Uscita Pianificata</label>
+        <input id="ora_pianificata_uscita" name="ora_pianificata_uscita" type="time" />
       </div>
     </div>
 
-    <label for="ora_ingresso">Orario Ingresso Filiale</label>
-    <input id="ora_ingresso" name="ora_ingresso" type="time" />
+    <h3>Orario Effettivo</h3>
+    <div class="row">
+      <div>
+        <label for="ora_effettiva_ingresso">Ingresso Effettivo</label>
+        <input id="ora_effettiva_ingresso" name="ora_effettiva_ingresso" type="time" />
+      </div>
+      <div>
+        <label for="ora_effettiva_uscita">Uscita Effettiva</label>
+        <input id="ora_effettiva_uscita" name="ora_effettiva_uscita" type="time" />
+      </div>
+    </div>
 
-    <h2>4. Motivazione</h2>
+    <h2>4. Motivazione</h2> Motivazione</h2>
     <label for="motivo">Motivo della Segnalazione / Contestazione</label>
     <textarea id="motivo" name="motivo"></textarea>
 
