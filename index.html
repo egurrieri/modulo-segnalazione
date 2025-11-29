@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <title>Modulo Digitale – Segnalazione Anomalia Visita Capoarea</title>
+  <style>
+    body { font-family: Arial, sans-serif; background:#f4f4f4; padding:20px; }
+    .container { max-width:800px; margin:auto; background:#fff; padding:20px; border-radius:10px; box-shadow:0 0 10px rgba(0,0,0,0.1); }
+    h1, h2 { color:#1a3d8f; }
+    label { font-weight:bold; display:block; margin-top:15px; }
+    input, textarea, select { width:100%; padding:8px; margin-top:5px; border:1px solid #ccc; border-radius:5px; }
+    textarea { height:100px; }
+    .row { display:flex; gap:20px; flex-wrap:wrap; }
+    .row div { flex:1; min-width:150px; }
+    button { margin-top:20px; padding:12px 20px; background:#1a3d8f; color:#fff; border:none; border-radius:5px; cursor:pointer; font-size:16px; }
+    button:hover { background:#0f2960; }
+  </style>
+  <!-- Libreria jsPDF per la generazione del PDF -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+</head>
+<body>
+  <div class="container">
+    <h1>Segnalazione Anomalia – Visita Capoarea</h1>
+
+    <h2>1. Tipologia Comunicazione</h2>
+    <label for="tipo">Tipo:</label>
+    <select id="tipo" name="tipo">
+      <option value="richiamo">Richiamo</option>
+      <option value="contestazione">Contestazione</option>
+    </select>
+
+    <h2>2. Dati Collaboratore</h2>
+    <label for="nome">Nome e Cognome</label>
+    <input id="nome" name="nome" type="text" />
+
+    <label for="ruolo">Ruolo</label>
+    <input id="ruolo" name="ruolo" type="text" />
+
+    <label for="filiale">Filiale</label>
+    <input id="filiale" name="filiale" type="text" />
+
+    <h2>3. Dettagli Evento</h2>
+    <div class="row">
+      <div>
+        <label for="data_evento">Data Evento</label>
+        <input id="data_evento" name="data_evento" type="date" />
+      </div>
+      <div>
+        <label for="ora_pianificata">Orario Pianificato</label>
+        <input id="ora_pianificata" name="ora_pianificata" type="time" />
+      </div>
+      <div>
+        <label for="ora_effettiva">Orario Effettivo</label>
+        <input id="ora_effettiva" name="ora_effettiva" type="time" />
+      </div>
+    </div>
+
+    <label for="ora_ingresso">Orario Ingresso Filiale</label>
+    <input id="ora_ingresso" name="ora_ingresso" type="time" />
+
+    <h2>4. Motivazione</h2>
+    <label for="motivo">Motivo della Segnalazione / Contestazione</label>
+    <textarea id="motivo" name="motivo"></textarea>
+
+    <h2>5. Descrizione Anomalia</h2>
+    <label for="descrizione">Descrizione Dettagliata</label>
+    <textarea id="descrizione" name="descrizione"></textarea>
+
+    <h2>6. Dichiarazioni Collaboratore</h2>
+    <label for="dichiarazioni">Dichiarazioni (riportate fedelmente)</label>
+    <textarea id="dichiarazioni" name="dichiarazioni"></textarea>
+
+    <h2>7. Testimoni</h2>
+    <label for="testimone_nome">Nome Testimone</label>
+    <input id="testimone_nome" name="testimone_nome" type="text" />
+
+    <label for="testimone_ruolo">Ruolo</label>
+    <input id="testimone_ruolo" name="testimone_ruolo" type="text" />
+
+    <h2>8. Articoli Coinvolti (se presenti)</h2>
+    <label for="codici_articoli">Codici Articoli</label>
+    <input id="codici_articoli" name="codici_articoli" type="text" />
+
+    <label for="quantita">Quantità</label>
+    <input id="quantita" name="quantita" type="number" />
+
+    <label for="valore_merce">Valore Merce / Descrizione</label>
+    <textarea id="valore_merce" name="valore_merce"></textarea>
+
+    <h2>9. Superiori Coinvolti</h2>
+    <label for="superiori">Dettaglio Superiori coinvolti</label>
+    <textarea id="superiori" name="superiori"></textarea>
+
+    <h2>10. Allegati</h2>
+    <label for="allegati">Carica File</label>
+    <input id="allegati" name="allegati" type="file" multiple />
+
+    <button type="button" onclick="generatePDF()">Scarica PDF</button>
+  </div>
+
+  <script>
+    function generatePDF() {
+      // Prova a recuperare jsPDF sia in modalità UMD che globale
+      const jspdfUMD = window.jspdf;
+      const JsPDFClass = (jspdfUMD && jspdfUMD.jsPDF) ? jspdfUMD.jsPDF : window.jsPDF;
+
+      if (!JsPDFClass) {
+        alert('Impossibile generare il PDF: libreria jsPDF non caricata.');
+        return;
+      }
+
+      const doc = new JsPDFClass({ unit: 'pt', format: 'a4' });
+
+      let y = 40;
+      doc.setFontSize(16);
+      doc.text('Segnalazione Anomalia – Visita Capoarea', 40, y);
+      y += 30;
+      doc.setFontSize(12);
+
+      const fields = [
+        ['Tipo', document.getElementById('tipo').value],
+        ['Nome e Cognome', document.getElementById('nome').value],
+        ['Ruolo', document.getElementById('ruolo').value],
+        ['Filiale', document.getElementById('filiale').value],
+        ['Data Evento', document.getElementById('data_evento').value],
+        ['Orario Pianificato', document.getElementById('ora_pianificata').value],
+        ['Orario Effettivo', document.getElementById('ora_effettiva').value],
+        ['Orario Ingresso Filiale', document.getElementById('ora_ingresso').value],
+        ['Motivo della Segnalazione / Contestazione', document.getElementById('motivo').value],
+        ['Descrizione Dettagliata', document.getElementById('descrizione').value],
+        ['Dichiarazioni Collaboratore', document.getElementById('dichiarazioni').value],
+        ['Nome Testimone', document.getElementById('testimone_nome').value],
+        ['Ruolo Testimone', document.getElementById('testimone_ruolo').value],
+        ['Codici Articoli', document.getElementById('codici_articoli').value],
+        ['Quantità', document.getElementById('quantita').value],
+        ['Valore Merce / Descrizione', document.getElementById('valore_merce').value],
+        ['Superior i Coinvolti', document.getElementById('superiori').value]
+      ];
+
+      fields.forEach(([label, value]) => {
+        const text = `${label}: ${value || ''}`;
+        const lines = doc.splitTextToSize(text, 520);
+        lines.forEach(line => {
+          if (y > 780) {
+            doc.addPage();
+            y = 40;
+          }
+          doc.text(line, 40, y);
+          y += 16;
+        });
+        y += 4;
+      });
+
+      doc.save('Segnalazione_Capoarea.pdf');
+    }
+  </script>
+</body>
+</html>
