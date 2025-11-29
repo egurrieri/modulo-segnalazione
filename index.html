@@ -6,7 +6,7 @@
   <style>
     body { font-family: Arial, sans-serif; background:#f4f4f4; padding:20px; }
     .container { max-width:800px; margin:auto; background:#fff; padding:20px; border-radius:10px; box-shadow:0 0 10px rgba(0,0,0,0.1); }
-    h1, h2 { color:#1a3d8f; }
+    h1, h2, h3 { color:#1a3d8f; }
     label { font-weight:bold; display:block; margin-top:15px; }
     input, textarea, select { width:100%; padding:8px; margin-top:5px; border:1px solid #ccc; border-radius:5px; }
     textarea { height:100px; }
@@ -15,9 +15,11 @@
     button { margin-top:20px; padding:12px 20px; background:#1a3d8f; color:#fff; border:none; border-radius:5px; cursor:pointer; font-size:16px; }
     button:hover { background:#0f2960; }
   </style>
-  <!-- Libreria jsPDF per la generazione del PDF -->
+
+  <!-- jsPDF -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 </head>
+
 <body>
   <div class="container">
     <h1>Segnalazione Anomalia – Visita Capoarea</h1>
@@ -65,7 +67,7 @@
       </div>
     </div>
 
-    <h2>4. Motivazione</h2> Motivazione</h2>
+    <h2>4. Motivazione</h2>
     <label for="motivo">Motivo della Segnalazione / Contestazione</label>
     <textarea id="motivo" name="motivo"></textarea>
 
@@ -107,46 +109,44 @@
 
   <script>
     function generatePDF() {
-      // Prova a recuperare jsPDF sia in modalità UMD che globale
       const jspdfUMD = window.jspdf;
       const JsPDFClass = (jspdfUMD && jspdfUMD.jsPDF) ? jspdfUMD.jsPDF : window.jsPDF;
 
       if (!JsPDFClass) {
-        alert('Impossibile generare il PDF: libreria jsPDF non caricata.');
+        alert("Errore: jsPDF non è stato caricato.");
         return;
       }
 
-      const doc = new JsPDFClass({ unit: 'pt', format: 'a4' });
+      const doc = new JsPDFClass({ unit: "pt", format: "a4" });
 
       let y = 40;
       doc.setFontSize(16);
-      doc.text('Segnalazione Anomalia – Visita Capoarea', 40, y);
+      doc.text("Segnalazione Anomalia – Visita Capoarea", 40, y);
       y += 30;
       doc.setFontSize(12);
 
       const fields = [
-        ['Tipo', document.getElementById('tipo').value],
-        ['Nome e Cognome', document.getElementById('nome').value],
-        ['Ruolo', document.getElementById('ruolo').value],
-        ['Filiale', document.getElementById('filiale').value],
-        ['Data Evento', document.getElementById('data_evento').value],
-        ['Orario Pianificato', document.getElementById('ora_pianificata').value],
-        ['Orario Effettivo', document.getElementById('ora_effettiva').value],
-        ['Orario Ingresso Filiale', document.getElementById('ora_ingresso').value],
-        ['Motivo della Segnalazione / Contestazione', document.getElementById('motivo').value],
-        ['Descrizione Dettagliata', document.getElementById('descrizione').value],
-        ['Dichiarazioni Collaboratore', document.getElementById('dichiarazioni').value],
-        ['Nome Testimone', document.getElementById('testimone_nome').value],
-        ['Ruolo Testimone', document.getElementById('testimone_ruolo').value],
-        ['Codici Articoli', document.getElementById('codici_articoli').value],
-        ['Quantità', document.getElementById('quantita').value],
-        ['Valore Merce / Descrizione', document.getElementById('valore_merce').value],
-        ['Superior i Coinvolti', document.getElementById('superiori').value]
+        ["Tipo", document.getElementById("tipo").value],
+        ["Nome e Cognome", document.getElementById("nome").value],
+        ["Ruolo", document.getElementById("ruolo").value],
+        ["Filiale", document.getElementById("filiale").value],
+        ["Ingresso Pianificato", document.getElementById("ora_pianificata_ingresso").value],
+        ["Uscita Pianificata", document.getElementById("ora_pianificata_uscita").value],
+        ["Ingresso Effettivo", document.getElementById("ora_effettiva_ingresso").value],
+        ["Uscita Effettiva", document.getElementById("ora_effettiva_uscita").value],
+        ["Motivo", document.getElementById("motivo").value],
+        ["Descrizione", document.getElementById("descrizione").value],
+        ["Dichiarazioni", document.getElementById("dichiarazioni").value],
+        ["Nome Testimone", document.getElementById("testimone_nome").value],
+        ["Ruolo Testimone", document.getElementById("testimone_ruolo").value],
+        ["Codici Articoli", document.getElementById("codici_articoli").value],
+        ["Quantità", document.getElementById("quantita").value],
+        ["Valore Merce / Descrizione", document.getElementById("valore_merce").value],
+        ["Superior i Coinvolti", document.getElementById("superiori").value]
       ];
 
       fields.forEach(([label, value]) => {
-        const text = `${label}: ${value || ''}`;
-        const lines = doc.splitTextToSize(text, 520);
+        const lines = doc.splitTextToSize(label + ": " + (value || ""), 520);
         lines.forEach(line => {
           if (y > 780) {
             doc.addPage();
@@ -158,8 +158,9 @@
         y += 4;
       });
 
-      doc.save('Segnalazione_Capoarea.pdf');
+      doc.save("Segnalazione_Capoarea.pdf");
     }
   </script>
+
 </body>
 </html>
